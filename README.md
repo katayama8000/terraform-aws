@@ -1,4 +1,4 @@
-# Terraform AWS Project
+# Terraform AWS
 
 ## Prerequisites
 
@@ -8,12 +8,12 @@
 
 ## Setup
 
-1. Copy `.env` to `.env.local` and fill in your AWS credentials:
+1. Copy `.env.local` to `.env` and fill in your AWS credentials:
 ```bash
-cp .env .env.local
+cp .env.local .env
 ```
 
-2. Edit `.env.local` with your AWS credentials:
+2. Edit `.env` with your AWS credentials:
 ```
 AWS_ACCESS_KEY_ID=your-access-key-id
 AWS_SECRET_ACCESS_KEY=your-secret-access-key
@@ -133,5 +133,3 @@ terraform init
 ```bash
 terraform force-unlock <lock-id>
 ```
-# terraform-aws
-# terraform-aws
