@@ -21,5 +21,6 @@
 				"hashicorp.terraform"
 			]
 		}
-	}
+	},
+	"postStartCommand": "bash -c 'if [ -f setup-env.sh ]; then source setup-env.sh; fi'"
 }
