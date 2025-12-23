@@ -81,6 +81,7 @@ resource "aws_lambda_function" "rust_lambda" {
     ManagedBy   = "Terraform"
   }
 
+  # ignore changes because this lamda is deployed cargo-lambda tooling outside terraform
   lifecycle {
     ignore_changes = [
       filename,
