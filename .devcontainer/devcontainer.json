@@ -22,5 +22,6 @@
 			]
 		}
 	},
-	"postStartCommand": "bash -c 'if [ -f setup-env.sh ]; then source setup-env.sh; fi'"
+	"postCreateCommand": "echo 'source /workspaces/terraform-aws/.envrc' >> ~/.bashrc",
+	"postStartCommand": "bash -c 'source /workspaces/terraform-aws/.envrc && echo \"AWS Region: $AWS_DEFAULT_REGION\"'"
 }
