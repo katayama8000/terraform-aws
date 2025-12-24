@@ -12,6 +12,12 @@ resource "aws_lambda_function" "rust_lambda" {
   architectures = ["arm64"]
   publish       = false
 
+  environment {
+    variables = {
+      API_KEY = random_password.api_key.result
+    }
+  }
+
   ephemeral_storage {
     size = 512
   }
@@ -40,7 +46,25 @@ resource "aws_lambda_function" "rust_lambda" {
   }
 }
 
+# Lambda Function URL（AWS_IAM認証付き）
+resource "aws_lambda_function_url" "rust_lambda_url" {
+  function_name      = aws_lambda_function.rust_lambda.function_name
+  authorization_type = "AWS_IAM" # 認証必須！署名付きリクエストのみ受け付ける
+
+  cors {
+    allow_origins = ["*"] # 本番環境では具体的なドメインに変更してね！
+    allow_methods = ["*"] # 全てのHTTPメソッドを許可
+    allow_headers = ["content-type", "authorization", "x-amz-date", "x-amz-security-token"]
+    max_age       = 300
+  }
+}
+
 output "lambda_arn" {
   description = "ARN of the Lambda function"
   value       = aws_lambda_function.rust_lambda.arn
+}
+
+output "lambda_function_url" {
+  description = "Lambda Function URL (AWS_IAM認証必須！)"
+  value       = aws_lambda_function_url.rust_lambda_url.function_url
 }
