@@ -83,7 +83,7 @@ resource "aws_iam_policy" "ssm_read_policy" {
       {
         Effect   = "Allow",
         Action   = "ssm:GetParametersByPath",
-        Resource = "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/expo-push-api/*"
+        Resource = "arn:aws:ssm:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:parameter/expo-push-api/*"
       },
       {
         Effect   = "Allow",
