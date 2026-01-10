@@ -88,12 +88,6 @@ terraform refresh
 ```
 Update the state file with real infrastructure.
 
-### Import Existing Resources
-```bash
-terraform import <resource_type>.<resource_name> <resource_id>
-```
-Import existing infrastructure into Terraform state.
-
 ## AWS CLI Commands
 
 ### Check AWS Identity
@@ -101,35 +95,3 @@ Import existing infrastructure into Terraform state.
 aws sts get-caller-identity
 ```
 Verify which AWS account and user you're authenticated as.
-
-### List S3 Buckets
-```bash
-aws s3 ls
-```
-
-### List EC2 Instances
-```bash
-aws ec2 describe-instances
-```
-
-## Best Practices
-
-- Always run `terraform plan` before `terraform apply`
-- Use `.tfvars` files for environment-specific variables
-- Never commit sensitive data (credentials, private keys) to version control
-- Use remote state storage (S3 + DynamoDB) for team collaboration
-- Enable state locking to prevent concurrent modifications
-
-## Troubleshooting
-
-### Reset Terraform State
-```bash
-rm -rf .terraform
-rm .terraform.lock.hcl
-terraform init
-```
-
-### Force Unlock State
-```bash
-terraform force-unlock <lock-id>
-```

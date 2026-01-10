@@ -1,4 +1,3 @@
-
 # EventBridge Rule to trigger the API Gateway every 25th of the month
 resource "aws_cloudwatch_event_rule" "every_25th_day_rule" {
   name                = "every-25th-day-rule"
@@ -41,7 +40,7 @@ resource "aws_cloudwatch_event_connection" "api_key_connection" {
 resource "aws_cloudwatch_event_api_destination" "api_destination" {
   name                          = "expo-push-api-destination"
   connection_arn                = aws_cloudwatch_event_connection.api_key_connection.arn
-  invocation_endpoint           = "${aws_apigatewayv2_stage.expo_push_notification_api_default.invoke_url}/"
+  invocation_endpoint           = "${aws_apigatewayv2_stage.expo_push_notification_api_default.invoke_url}/scheduled"
   http_method                   = "POST"
   invocation_rate_limit_per_second = 1
 }
@@ -74,4 +73,31 @@ resource "aws_cloudwatch_event_target" "api_destination_target" {
   rule     = aws_cloudwatch_event_rule.every_25th_day_rule.name
   arn      = aws_cloudwatch_event_api_destination.api_destination.arn
   role_arn = aws_iam_role.eventbridge_to_apigateway_role.arn
+}
+
+# --- Manual Test Resources ---
+
+# Rule to trigger manually for testing
+resource "aws_cloudwatch_event_rule" "manual_test_rule" {
+  name        = "manual-test-rule-for-expo-push"
+  description = "Rule for manually testing the Expo Push API destination"
+
+  event_pattern = jsonencode({
+    "source"      = ["gemini.test"],
+    "detail-type" = ["manual-trigger"]
+  })
+}
+
+# Target to link the manual test rule to the existing API Destination
+resource "aws_cloudwatch_event_target" "manual_test_target" {
+  rule     = aws_cloudwatch_event_rule.manual_test_rule.name
+  arn      = aws_cloudwatch_event_api_destination.api_destination.arn
+  role_arn = aws_iam_role.eventbridge_to_apigateway_role.arn
+
+  input_transformer {
+    input_paths = {
+      "detail" = "$.detail"
+    }
+    input_template = "<detail>"
+  }
 }

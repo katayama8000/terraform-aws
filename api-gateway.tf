@@ -1,5 +1,3 @@
-
-
 # API Gateway HTTP API for Expo Push Notification API
 resource "aws_apigatewayv2_api" "expo_push_notification_api" {
   name          = "expo-push-notification-api"
@@ -39,6 +37,13 @@ resource "aws_apigatewayv2_integration" "expo_push_notification_api_lambda" {
 resource "aws_apigatewayv2_route" "expo_push_notification_api_post" {
   api_id    = aws_apigatewayv2_api.expo_push_notification_api.id
   route_key = "POST /"
+  target    = "integrations/${aws_apigatewayv2_integration.expo_push_notification_api_lambda.id}"
+}
+
+# Route for scheduled task POST requests
+resource "aws_apigatewayv2_route" "expo_push_notification_api_post_scheduled" {
+  api_id    = aws_apigatewayv2_api.expo_push_notification_api.id
+  route_key = "POST /scheduled"
   target    = "integrations/${aws_apigatewayv2_integration.expo_push_notification_api_lambda.id}"
 }
 
